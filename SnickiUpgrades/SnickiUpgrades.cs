@@ -12,7 +12,6 @@ namespace SnickiUpgrades;
 public class SnickiUpgrades : BaseUnityPlugin
 {
     public static GameObject teleporter;
-
     internal static SnickiUpgrades Instance { get; private set; } = null!;
     internal new static ManualLogSource Logger => Instance._logger;
     private ManualLogSource _logger => base.Logger;
@@ -44,8 +43,8 @@ public class SnickiUpgrades : BaseUnityPlugin
     private static void InitUpgrades(AssetBundle assetBundle)
     {
         SnickiUpgrades.Logger.LogDebug("Init Upgrades");
-        Item gravityItem = assetBundle.LoadAsset<Item>("Item Upgrade Player Gravity");
-        gravityItem.prefab = assetBundle.LoadAsset<GameObject>("Item Upgrade Player Gravity");
+        Item gravityItem = assetBundle.LoadAsset<Item>("Item Upgrade Player Last Chance");
+        gravityItem.prefab = assetBundle.LoadAsset<GameObject>("Item Upgrade Player Last Chance");
         Items.RegisterItem(gravityItem);
         LastChanceUpgradeRegister = Upgrades.RegisterUpgrade("Last Chance", gravityItem, InitLastChanceUpgrade, UseLastChanceUpgrade);
     }
@@ -57,16 +56,6 @@ public class SnickiUpgrades : BaseUnityPlugin
         {
             return;
         }
-
-        PlayerController playerController = PlayerController.instance;
-        if (!initialGravitySet)
-        {
-            initialGravitySet = true;
-
-            initialGravity = playerController.playerOriginalCustomGravity;
-        }
-        playerController.CustomGravity = CalculateGravity(level);
-        Logger.LogDebug($"New Gravity is => {playerController.CustomGravity}");
     }
 
     private static void UseLastChanceUpgrade(PlayerAvatar player, int level)
@@ -76,18 +65,6 @@ public class SnickiUpgrades : BaseUnityPlugin
         {
             return;
         }
-
-        
-
-        PlayerController playerController = PlayerController.instance;
-        float newValue = CalculateGravity(level);
-        playerController.CustomGravity = newValue;
-        Logger.LogDebug($"New Gravity is => {playerController.CustomGravity}");
-    }
-
-    private static float CalculateGravity(int level)
-    {
-        return initialGravity / level;
     }
 
     internal void Patch()
