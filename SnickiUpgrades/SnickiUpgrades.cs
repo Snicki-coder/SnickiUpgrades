@@ -19,9 +19,6 @@ public class SnickiUpgrades : BaseUnityPlugin
 
     public static PlayerUpgrade LastChanceUpgradeRegister;
 
-    private static float initialGravity;
-    private static bool initialGravitySet = false;
-
     private void Awake()
     {
         Instance = this;
